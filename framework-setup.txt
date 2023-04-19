@@ -1,0 +1,85 @@
+Pytest - Selenium:
+===================
+On ubuntu:
+sudo apt install default-jdk
+sudo apt-get install python 
+sudo apt-get install maven
+sudo apt update
+sudo apt install python3-pip
+On mac:
+sudo brew install default-jdk
+sudo brew install python
+sudo brew install maven
+sudo apt update
+sudo brew install python3-pip
+
+Confirm Installed: 
+    java -version  (Noticed: Single hyphen?)
+    python3 --version 
+    pip --version
+
+Set Maven & JAVa environment variable on MAC:
+————————————————————————-------------------
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home/jre
+export M2_HOME=/usr/local/Cellar/maven/3.8.6
+export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
+
+Make a project directory : e.g. mkdir mytestproject
+cd mytestproject
+
+Create a virtual environment: To isolate your project environments/liberaries/installs etc.
+So that anything you install will be specific to this project not in your python global setting.
+
+python3 -m venv path/to/mytestproject/
+
+pip3 install selenium 
+   To check selenium  version:  Pip3 show selenium
+
+pip3 install pytest
+    To check version; pip3 show pytest
+
+pip3 install pytest-xdist  
+    Used to execute parrallel testing on multi-thread and multi browser.
+    pip3 show pytest-xdist
+
+pip3 install pytest-html 
+    Used to generate html report , pip3 show pytest-html
+
+You are all done setup!
+
+About Framework:
+================
+
+Config folder: Keep all configuration related stuffs.
+config.py : Used to manage test data, you can also manage using yaml, excel, properties etc.
+
+Pages: Keep all web pages related functions
+BasePage.py : Used to contain all basic UI related interaction fuctions like click, hover, entertext etc.
+LoginPage.py : Contains all locators and page related functions.
+
+Tests:
+__init__.py : This is dummy to initiaze tests, remove this and see if your test runs :)
+conftest.py : To initialize your driver, write method to take screeshot etc. etc.
+        I have used fixture on this - to know more about fixture read https://betterprogramming.pub/understand-5-scopes-of-pytest-fixtures-1b607b5c19ed
+test_Base.py : Its base class which will keep driver with and other classes will extend this to get driver instance.
+    
+    We wanted to avoid to add fixture on every class like below, hence written on test_Base.py class and exteded it.
+@pytest.mark.usefixtures("init_driver")
+class Test_login(): 
+
+test_LoginPage.py : To write actual tests, you can create this file like LoginPage_text.py,
+ pytest will be able to read this way as well but make sure you have test either prefixed or suffixed
+pytest reads prefix better than suffixed.
+
+Now run the framework using:
+
+Simple run:
+pytest   : This will run all the test under Test folders
+
+Run with verbose:
+pytest -v  : This will show you runtime logs.
+
+Run with multiple threads / Parallel execution:
+pytest Tests/test_LoginPage.py -v -n 3 --html=report/test-execution-report.html -s
+
+
